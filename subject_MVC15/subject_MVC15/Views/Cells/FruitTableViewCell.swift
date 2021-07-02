@@ -9,8 +9,8 @@ import UIKit
 
 class FruitTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var checkmarkImageView: UIImageView!
-    @IBOutlet weak var fruitNameLabel: UILabel!
+    @IBOutlet private weak var checkmarkImageView: UIImageView!
+    @IBOutlet private weak var fruitNameLabel: UILabel!
 
     static let identifier = "FruitTableViewCell"
 

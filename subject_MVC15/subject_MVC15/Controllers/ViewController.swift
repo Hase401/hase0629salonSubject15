@@ -77,7 +77,6 @@ extension ViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // 【疑問エラー】このメソッドで"guard let -- else { return }"はできないのでダウンキャストas!を使うしか他に方法はないのか？
         let customCell = tableView.dequeueReusableCell(
                             // swiftlint:disable:next force_cast
                             withIdentifier: FruitTableViewCell.identifier, for: indexPath) as! FruitTableViewCell
