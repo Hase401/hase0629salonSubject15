@@ -16,7 +16,7 @@ class InputFruitViewController: UIViewController {
                             didCancel: @escaping () -> Void ) -> InputFruitViewController {
 
         let modalVC = UIStoryboard(name: "Main", bundle: nil)
-
+                        // swiftlint:disable:next force_cast
                         .instantiateViewController(identifier: "InputFruitViewController") as! InputFruitViewController
         modalVC.didSaveFruitsHandler = didSaveFruits
         modalVC.didCancelHandler = didCancel

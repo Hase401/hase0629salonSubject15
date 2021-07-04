@@ -26,7 +26,7 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.tableFooterView = UIView()
-        /// UserDefaultsを停止
+        // UserDefaultsを停止
 //        fruitsArray = self.fruitsArrayRepository.load() ?? Self.initialFruitsArray
         fruitsArray = Self.initialFruitsArray
     }
@@ -34,11 +34,11 @@ class ViewController: UIViewController {
     @IBAction func addCellDidTapped(_ sender: UIBarButtonItem) {
         let inputFruitViewController = InputFruitViewController.instantiate(
             didSaveFruits: { [weak self] text in
-                /// guard let 文でself?を書かないで済むようにアンラップ
+                // guard let 文でself?を書かないで済むようにアンラップ
                 guard let strongSelf = self else { return }
                 let newFruit = Fruit(isChecked: false, name: text)
                 strongSelf.fruitsArray.append(newFruit)
-                /// UserDefaultsを停止
+                // UserDefaultsを停止
 //                _ = strongSelf.fruitsArrayRepository.save(newFruitsArray: strongSelf.fruitsArray)
                 strongSelf.tableView.reloadData()
                 strongSelf.dismiss(animated: true, completion: nil)
@@ -65,6 +65,7 @@ extension ViewController: UITableViewDelegate {
         // ②クロージャで渡してやる
         // ③自作delegateを使う
         // 【課題】もっとゆっくりチェックマークとつけたりはずす、アニメーションがほしい
+        // swiftlint:disable:next force_cast
         let cell = tableView.cellForRow(at: indexPath) as! FruitTableViewCell
         cell.configure(fruit: fruitsArray[indexPath.row])
     }

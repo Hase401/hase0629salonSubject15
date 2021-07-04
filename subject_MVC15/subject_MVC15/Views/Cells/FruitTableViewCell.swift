@@ -23,5 +23,4 @@ class FruitTableViewCell: UITableViewCell {
         checkmarkImageView.image = fruit.isChecked ? UIImage(systemName: "checkmark") : nil
     }
 
-    
 }
