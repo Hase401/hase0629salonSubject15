@@ -36,7 +36,8 @@ final class ViewController: UIViewController {
                 let newFruit = Fruit(isChecked: false, name: text)
                 strongSelf.fruitsArray.append(newFruit)
                 _ = strongSelf.fruitsArrayRepository.save(newFruitsArray: strongSelf.fruitsArray)
-                strongSelf.tableView.reloadData()
+                // 【疑問】ここでreloadDataを呼ぶ必要はあるのか？
+                //                strongSelf.tableView.reloadData()
                 strongSelf.dismiss(animated: true, completion: nil)
             },
             didCancel: { [weak self] in
@@ -56,7 +57,8 @@ extension ViewController: UITableViewDelegate {
         // 【解決策】TableViewCell内にもModelとして共有する配列を作り、toggleする専用のメソッドを作る
         fruitsArray[indexPath.row].isChecked.toggle()
         _ = self.fruitsArrayRepository.save(newFruitsArray: self.fruitsArray)
-        self.tableView.reloadData()
+        // 【疑問】ここでreloadDataを呼ぶ必要はあるのか？
+        //        self.tableView.reloadData()
         let cell = tableView.cellForRow(at: indexPath) as! FruitTableViewCell
         cell.configure(fruit: fruitsArray[indexPath.row])
     }
