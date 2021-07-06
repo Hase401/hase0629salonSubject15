@@ -7,8 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+final class ViewController: UIViewController {
     @IBOutlet private weak var tableView: UITableView!
 
     private var fruitsArray: [Fruit] = []
@@ -26,23 +25,19 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.tableFooterView = UIView()
-        // UserDefaultsを停止
-//        fruitsArray = self.fruitsArrayRepository.load() ?? Self.initialFruitsArray
-        fruitsArray = Self.initialFruitsArray
+        fruitsArray = self.fruitsArrayRepository.load() ?? Self.initialFruitsArray
     }
 
-    @IBAction func addCellDidTapped(_ sender: UIBarButtonItem) {
+    @IBAction private func addCellDidTapped(_ sender: UIBarButtonItem) {
         let inputFruitViewController = InputFruitViewController.instantiate(
             didSaveFruits: { [weak self] text in
-                // guard let 文でself?を書かないで済むようにアンラップ
+                // 【メモ】guard let 文でself?を書かないで済むようにアンラップ
                 guard let strongSelf = self else { return }
                 let newFruit = Fruit(isChecked: false, name: text)
                 strongSelf.fruitsArray.append(newFruit)
-                // UserDefaultsを停止
-//                _ = strongSelf.fruitsArrayRepository.save(newFruitsArray: strongSelf.fruitsArray)
+                _ = strongSelf.fruitsArrayRepository.save(newFruitsArray: strongSelf.fruitsArray)
                 strongSelf.tableView.reloadData()
                 strongSelf.dismiss(animated: true, completion: nil)
-
             },
             didCancel: { [weak self] in
                 self?.dismiss(animated: true, completion: nil)
@@ -53,18 +48,15 @@ class ViewController: UIViewController {
         )
         present(navigationController, animated: true)
     }
-
 }
 
 extension ViewController: UITableViewDelegate {
-
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // 【疑問】ここでtoggleするのは、UIViewControllerとUITableViewCellのどちらにやらせるべき？
+        // 【解決策】TableViewCell内にもModelとして共有する配列を作り、toggleする専用のメソッドを作る
         fruitsArray[indexPath.row].isChecked.toggle()
-        // 【課題】今知っているやりたいことのパターンは
-        // ①fruitCellのconfigureメソッドを呼びたい ←今回はここをやってみた
-        // ②クロージャで渡してやる
-        // ③自作delegateを使う
-        // 【課題】もっとゆっくりチェックマークとつけたりはずす、アニメーションがほしい
+        _ = self.fruitsArrayRepository.save(newFruitsArray: self.fruitsArray)
+        self.tableView.reloadData()
         // swiftlint:disable:next force_cast
         let cell = tableView.cellForRow(at: indexPath) as! FruitTableViewCell
         cell.configure(fruit: fruitsArray[indexPath.row])
@@ -72,7 +64,6 @@ extension ViewController: UITableViewDelegate {
 }
 
 extension ViewController: UITableViewDataSource {
-
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         fruitsArray.count
     }

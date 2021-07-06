@@ -7,8 +7,7 @@
 
 import UIKit
 
-class FruitTableViewCell: UITableViewCell {
-
+final class FruitTableViewCell: UITableViewCell {
     @IBOutlet private weak var checkmarkImageView: UIImageView!
     @IBOutlet private weak var fruitNameLabel: UILabel!
 
@@ -22,5 +21,4 @@ class FruitTableViewCell: UITableViewCell {
         fruitNameLabel.text = fruit.name
         checkmarkImageView.image = fruit.isChecked ? UIImage(systemName: "checkmark") : nil
     }
-
 }
