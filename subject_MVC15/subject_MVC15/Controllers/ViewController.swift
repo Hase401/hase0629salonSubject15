@@ -57,7 +57,6 @@ extension ViewController: UITableViewDelegate {
         fruitsArray[indexPath.row].isChecked.toggle()
         _ = self.fruitsArrayRepository.save(newFruitsArray: self.fruitsArray)
         self.tableView.reloadData()
-        // swiftlint:disable:next force_cast
         let cell = tableView.cellForRow(at: indexPath) as! FruitTableViewCell
         cell.configure(fruit: fruitsArray[indexPath.row])
     }
@@ -70,8 +69,7 @@ extension ViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let customCell = tableView.dequeueReusableCell(
-                            // swiftlint:disable:next force_cast
-                            withIdentifier: FruitTableViewCell.identifier, for: indexPath) as! FruitTableViewCell
+            withIdentifier: FruitTableViewCell.identifier, for: indexPath) as! FruitTableViewCell
         customCell.configure(fruit: fruitsArray[indexPath.row])
         return customCell
     }
