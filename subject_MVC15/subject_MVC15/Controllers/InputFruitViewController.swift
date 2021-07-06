@@ -7,14 +7,12 @@
 
 import UIKit
 
-class InputFruitViewController: UIViewController {
-
+final class InputFruitViewController: UIViewController {
     @IBOutlet private weak var nameLabel: UILabel!
     @IBOutlet private weak var nameTextField: UITextField!
 
     static func instantiate(didSaveFruits: @escaping (String) -> Void,
                             didCancel: @escaping () -> Void ) -> InputFruitViewController {
-
         let modalVC = UIStoryboard(name: "Main", bundle: nil)
                         // swiftlint:disable:next force_cast
                         .instantiateViewController(identifier: "InputFruitViewController") as! InputFruitViewController
@@ -26,12 +24,11 @@ class InputFruitViewController: UIViewController {
     private var didSaveFruitsHandler: (String) -> Void = { _ in }
     private var didCancelHandler: () -> Void = {}
 
-    @IBAction func cancelDidTapped(_ sender: UIBarButtonItem) {
+    @IBAction private func cancelDidTapped(_ sender: UIBarButtonItem) {
         didCancelHandler()
     }
-    @IBAction func saveCellDataDidTapped(_ sender: UIBarButtonItem) {
+    @IBAction private func saveCellDataDidTapped(_ sender: UIBarButtonItem) {
         let text = nameTextField.text ?? ""
         didSaveFruitsHandler(text)
     }
-
 }
