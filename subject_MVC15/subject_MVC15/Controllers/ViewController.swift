@@ -57,8 +57,6 @@ extension ViewController: UITableViewDelegate {
         // 【疑問】ここでtoggleするのは、UIViewControllerとUITableViewCellのどちらにやらせるべき？
         fruitsArray[indexPath.row].isChecked.toggle()
         _ = self.fruitsArrayRepository.save(newFruitsArray: self.fruitsArray)
-        // tableViewに表示させる方法①
-        //        tableView.reloadData()
         // tableViewに表示させる方法②　// こっちの方が処理が早そう？　//　タップしたときの様子がわかる
         let fruitCell = tableView.cellForRow(at: indexPath) as! FruitTableViewCell
         fruitCell.configure(fruit: fruitsArray[indexPath.row])
