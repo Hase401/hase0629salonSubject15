@@ -31,13 +31,14 @@ final class ViewController: UIViewController {
     @IBAction private func addCellDidTapped(_ sender: UIBarButtonItem) {
         let inputFruitViewController = InputFruitViewController.instantiate(
             didSaveFruits: { [weak self] text in
-                // 【メモ】guard let 文でself?を書かないで済むようにアンラップ
+                // guard let 文でself?を書かないで済むようにアンラップ
                 guard let strongSelf = self else { return }
                 let newFruit = Fruit(isChecked: false, name: text)
                 strongSelf.fruitsArray.append(newFruit)
                 _ = strongSelf.fruitsArrayRepository.save(newFruitsArray: strongSelf.fruitsArray)
-                // 【疑問】ここでreloadDataを呼ぶ必要はあるのか？
-                //                strongSelf.tableView.reloadData()
+                // 【疑問】ここでreloadData()を呼ぶ必要はあるのか？
+                // 【回答】呼ばないとtableViewに表示されない
+                strongSelf.tableView.reloadData()
                 strongSelf.dismiss(animated: true, completion: nil)
             },
             didCancel: { [weak self] in
@@ -54,13 +55,15 @@ final class ViewController: UIViewController {
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // 【疑問】ここでtoggleするのは、UIViewControllerとUITableViewCellのどちらにやらせるべき？
-        // 【解決策】TableViewCell内にもModelとして共有する配列を作り、toggleする専用のメソッドを作る
         fruitsArray[indexPath.row].isChecked.toggle()
         _ = self.fruitsArrayRepository.save(newFruitsArray: self.fruitsArray)
-        // 【疑問】ここでreloadDataを呼ぶ必要はあるのか？
-        //        self.tableView.reloadData()
-        let cell = tableView.cellForRow(at: indexPath) as! FruitTableViewCell
-        cell.configure(fruit: fruitsArray[indexPath.row])
+        // tableViewに表示させる方法①
+        //        tableView.reloadData()
+        // tableViewに表示させる方法②　// こっちの方が処理が早そう？　//　タップしたときの様子がわかる
+        let fruitCell = tableView.cellForRow(at: indexPath) as! FruitTableViewCell
+        fruitCell.configure(fruit: fruitsArray[indexPath.row])
+        // 【疑問】最後にこれをいれといた方がいい？
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
@@ -70,9 +73,9 @@ extension ViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let customCell = tableView.dequeueReusableCell(
+        let fruitCell = tableView.dequeueReusableCell(
             withIdentifier: FruitTableViewCell.identifier, for: indexPath) as! FruitTableViewCell
-        customCell.configure(fruit: fruitsArray[indexPath.row])
-        return customCell
+        fruitCell.configure(fruit: fruitsArray[indexPath.row])
+        return fruitCell
     }
 }
