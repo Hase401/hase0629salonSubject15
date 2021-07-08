@@ -13,8 +13,13 @@ final class InputFruitViewController: UIViewController {
 
     static func instantiate(didSaveFruits: @escaping (String) -> Void,
                             didCancel: @escaping () -> Void ) -> InputFruitViewController {
-        let inputModalVC = UIStoryboard(name: "Main", bundle: nil)
-            .instantiateViewController(identifier: "InputFruitViewController") as! InputFruitViewController
+        //        let inputModalVC = UIStoryboard(name: "Main", bundle: nil)
+        //            .instantiateViewController(identifier: "InputFruitViewController") as! InputFruitViewController
+        guard let inputModalVC = UIStoryboard(name: "Main", bundle: nil)
+                .instantiateViewController(identifier: "InputFruitViewController") as? InputFruitViewController else {
+            print("Error")
+            return InputFruitViewController()
+        }
         inputModalVC.didSaveFruitsHandler = didSaveFruits
         inputModalVC.didCancelHandler = didCancel
         return inputModalVC

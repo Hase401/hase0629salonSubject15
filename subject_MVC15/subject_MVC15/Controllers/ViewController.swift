@@ -60,9 +60,11 @@ extension ViewController: UITableViewDelegate {
         // tableViewに表示させる方法①
         //        tableView.reloadData()
         // tableViewに表示させる方法②　// こっちの方が処理が早そう？　//　タップしたときの様子がわかる
-        let fruitCell = tableView.cellForRow(at: indexPath) as! FruitTableViewCell
+        //        let fruitCell = tableView.cellForRow(at: indexPath) as! FruitTableViewCell
+
+        // as!の安全性の問題 as!のダウンキャストではなく、as?のアップキャストにしなければいけない // オプショナル型でキャストされていない
+        guard let fruitCell = tableView.cellForRow(at: indexPath) as? FruitTableViewCell else { return }
         fruitCell.configure(fruit: fruitsArray[indexPath.row])
-        // 【疑問】最後にこれをいれといた方がいい？
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
@@ -73,8 +75,9 @@ extension ViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let fruitCell = tableView.dequeueReusableCell(
-            withIdentifier: FruitTableViewCell.identifier, for: indexPath) as! FruitTableViewCell
+        let fruitCell = tableView.dequeueReusableCell(withIdentifier: FruitTableViewCell.identifier,
+                                                      // swiftlint:disable:next force_cast
+                                                      for: indexPath) as! FruitTableViewCell
         fruitCell.configure(fruit: fruitsArray[indexPath.row])
         return fruitCell
     }
